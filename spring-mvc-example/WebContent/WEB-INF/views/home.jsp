@@ -10,6 +10,7 @@
 	<h1>Hello world!</h1>
 
 	<P>The time on the server is ${serverTime}.</p>
+	<P>The response from the Apigee proxy was ${apigeeResponse}.</p>
 
 	<form action="user" method="post">
 		<input type="text" name="userName"><br> <input
