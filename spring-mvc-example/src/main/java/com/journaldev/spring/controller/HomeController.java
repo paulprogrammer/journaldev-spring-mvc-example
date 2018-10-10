@@ -1,5 +1,10 @@
 package com.journaldev.spring.controller;
 
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -27,6 +32,27 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 
 		model.addAttribute("serverTime", formattedDate);
+
+		try {
+			// change this, or get from an external config value
+			URL url = new URL("http://mocktarget.apigee.net/");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			int status = con.getResponseCode();
+			BufferedReader in = new BufferedReader(
+			new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer content = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				content.append(inputLine);
+			}
+			in.close();
+			String apigeeResponse = content.toString();
+			System.out.println(apigeeResponse);
+			model.addAttribute("apigeeResponse", apigeeResponse);
+		} catch (Throwable t) {
+			System.out.println (t.toString());
+		}
 
 		return "home";
 	}
